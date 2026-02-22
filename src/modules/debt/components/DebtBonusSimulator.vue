@@ -5,7 +5,7 @@ import { applyBonus } from "../debt.bonus"
 
 const store = useDebtStore()
 const bonus = ref(0)
-const preview = ref([])
+const preview = ref<any[]>([])
 
 function simulate() {
   preview.value = applyBonus(store.debts, bonus.value)

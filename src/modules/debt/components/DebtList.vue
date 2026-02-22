@@ -84,6 +84,10 @@ function cancelEdit() {
                     Balance: R{{ debt.currentBalance.toLocaleString() }}
                 </p>
 
+                <p class="text-xs opacity-70 mt-1">
+                    {{ (calculateProgress(debt) * 100).toFixed(1) }}% paid off
+                </p>
+
                 <p class="text-xs opacity-60 mt-1">
                     Est. Payoff:
                     {{ estimateDebtPayoffMonths(debt) }} months

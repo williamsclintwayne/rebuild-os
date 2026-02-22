@@ -3,13 +3,29 @@ import { defineStore } from "pinia"
 export const useCashflowStore = defineStore("cashflow", {
   state: () => ({
     salary: 0,
-    fixedExpenses: 0,
-    debtPayments: 0,
+    rent: 0,
+    groceries: 0,
+    fuel: 0,
+    electricity: 0,
+    babyExpenses: 0,
+    wifi: 0,
+    other: 0,
+    extraToDebt: 0,
+    emergencyFund: 0,
+    bonusAmount: 0,
   }),
 
   getters: {
-    surplus(state) {
-      return state.salary - state.fixedExpenses - state.debtPayments
+    fixedExpenses(state) {
+      return (
+        state.rent +
+        state.groceries +
+        state.fuel +
+        state.electricity +
+        state.babyExpenses +
+        state.wifi +
+        state.other
+      )
     },
   },
 

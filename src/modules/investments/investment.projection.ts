@@ -1,22 +1,72 @@
-import type { InvestmentConfig } from "./investment.types"
+export function projectInvestment(config: {
+  monthlyContribution: number
+  annualIncrease: number
+  annualReturn: number
+  years: number
+}) {
+  const {
+    monthlyContribution,
+    annualIncrease,
+    annualReturn,
+    years,
+  } = config
 
-export function projectInvestment(config: InvestmentConfig) {
-  const monthlyRate = config.annualReturn / 100 / 12
-  const months = config.years * 12
+  const annualTfsaLimit = 36000
+  const lifetimeTfsaLimit = 500000
 
-  let value = 0
-  let monthlyContribution = config.monthlyContribution
+  let portfolio = 0
+  let tfsaLifetimeUsed = 0
 
-  const yearlyData: number[] = []
+  const yearlyTotals: number[] = []
 
-  for (let m = 1; m <= months; m++) {
-    value = value * (1 + monthlyRate) + monthlyContribution
+  for (let year = 0; year < years; year++) {
+    const adjustedMonthly =
+      monthlyContribution *
+      Math.pow(1 + annualIncrease / 100, year)
 
-    if (m % 12 === 0) {
-      yearlyData.push(value)
-      monthlyContribution *= 1 + config.annualIncrease / 100
+    const yearlyContribution = adjustedMonthly * 12
+
+    let tfsaContribution = Math.min(
+      yearlyContribution,
+      annualTfsaLimit
+    )
+
+    if (tfsaLifetimeUsed + tfsaContribution > lifetimeTfsaLimit) {
+      tfsaContribution =
+        lifetimeTfsaLimit - tfsaLifetimeUsed
+    }
+
+    tfsaLifetimeUsed += tfsaContribution
+
+    const taxableContribution =
+      yearlyContribution - tfsaContribution
+
+    const totalContribution =
+      tfsaContribution + taxableContribution
+
+    portfolio =
+      (portfolio + totalContribution) *
+      (1 + annualReturn / 100)
+
+    yearlyTotals.push(portfolio)
+
+    if (tfsaLifetimeUsed >= lifetimeTfsaLimit) {
+      for (let remaining = year + 1; remaining < years; remaining++) {
+        const nextMonthly =
+          monthlyContribution *
+          Math.pow(1 + annualIncrease / 100, remaining)
+
+        const nextYearly = nextMonthly * 12
+
+        portfolio =
+          (portfolio + nextYearly) *
+          (1 + annualReturn / 100)
+
+        yearlyTotals.push(portfolio)
+      }
+      break
     }
   }
 
-  return yearlyData
+  return yearlyTotals
 }

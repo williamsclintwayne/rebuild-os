@@ -26,6 +26,8 @@ export function simulateSnowball(
 
     cloned.sort((a, b) => a.currentBalance - b.currentBalance)
 
+    let surplusApplied = false
+
     for (const debt of cloned) {
       if (debt.currentBalance <= 0) continue
 
@@ -37,13 +39,17 @@ export function simulateSnowball(
 
       let payment = debt.monthlyPayment
 
-      if (debt === cloned[0]) {
+      // Apply surplus only once to first active debt
+      if (!surplusApplied) {
         payment += config.extraPayment
+        surplusApplied = true
+      }
+
+      if (payment > debt.currentBalance) {
+        payment = debt.currentBalance
       }
 
       debt.currentBalance -= payment
-
-      if (debt.currentBalance < 0) debt.currentBalance = 0
     }
   }
 

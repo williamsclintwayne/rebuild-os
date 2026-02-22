@@ -22,14 +22,15 @@ const theme = useThemeStore()
     </div>
 
     <!-- Navigation -->
-    <div class="flex gap-4 mb-6">
-      <router-link to="/" class="underline">Dashboard</router-link>
-      <router-link to="/debts" class="underline">Debts</router-link>
+    <div class="min-h-screen">
+    <nav class="flex gap-6 p-4 border-b">
+      <router-link to="/">Dashboard</router-link>
+      <router-link to="/debts">Debts</router-link>
       <router-link to="/cashflow">Cashflow</router-link>
       <router-link to="/investments">Investments</router-link>
-    </div>
+    </nav>
 
-    <!-- View -->
     <router-view />
+    </div>
   </div>
 </template>
