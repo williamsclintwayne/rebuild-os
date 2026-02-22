@@ -14,8 +14,7 @@ function save() {
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto p-6 rounded-2xl shadow-md"
-       style="background-color: var(--card)">
+  <div class="max-w-2xl mx-auto p-6 rounded-2xl shadow-md" style="background-color: var(--card)">
     <h2 class="text-xl font-semibold mb-6">Investment Configuration</h2>
 
     <div class="space-y-4">
@@ -45,8 +44,12 @@ function save() {
         <input v-model.number="store.freedomTarget" type="number" class="input" />
       </div>
 
-      <button @click="save"
-              class="w-full bg-primary text-white py-2 rounded-xl mt-4">
+      <div class="flex items-center gap-2 mt-4">
+        <input type="checkbox" v-model="store.autoMode" />
+        <label>Auto invest full surplus</label>
+      </div>
+
+      <button @click="save" class="w-full bg-black text-white py-2 rounded-xl mt-4">
         Save Investment Settings
       </button>
 

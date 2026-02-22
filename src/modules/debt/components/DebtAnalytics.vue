@@ -11,17 +11,32 @@ const cashflowStore = useCashflowStore()
 const manualExtra = ref(0)
 const mode = ref<"manual" | "auto">("auto")
 
+const totalDebtPayments = computed(() =>
+  debtStore.debts.reduce((sum: number, d: any) => sum + d.monthlyPayment, 0)
+)
+
+const surplus = computed(() =>
+  cashflowStore.salary -
+  cashflowStore.fixedExpenses -
+  totalDebtPayments.value
+)
+
 const comparison = computed(() =>
     compareInterest(
         debtStore.debts,
-        Math.max(cashflowStore.surplus, 0)
+        Math.max(
+            cashflowStore.salary -
+            cashflowStore.fixedExpenses -
+            totalDebtPayments.value,
+            0
+        )
     )
 )
 
 const projection = computed(() => {
     const extra =
         mode.value === "auto"
-            ? Math.max(cashflowStore.surplus, 0)
+            ? Math.max(surplus.value, 0)
             : manualExtra.value
 
     return simulateSnowball(debtStore.debts, {
